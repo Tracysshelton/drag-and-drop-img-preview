@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Preview Tool</title>
+    <style>
+        #image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border: 2px dashed #ccc;
+            text-align: center;
+            padding: 20px;
+        }
+        #image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Preview Tool</h1>
+    <div id="image-preview">
+        <p>Drag and drop an image here or enter URL:</p>
+        <img id="preview-img" src="" alt="Image Preview">
+    </div>
+    <input type="file" id="file-input" style="display: none;">
+    <input type="text" id="url-input" placeholder="Enter image URL">
+    <button onclick="previewImage()">Preview of Image</button>
+
+    <script>
+        const imagePreview = document.getElementById('image-preview');
+        const previewImg = document.getElementById('preview-img');
+        const fileInput = document.getElementById('file-input');
+        const urlInput = document.getElementById('url-input');
+
+        // Function to handle file drag and drop
+        imagePreview.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            imagePreview.style.border = '1px solid black';
+        });
+
+        imagePreview.addEventListener('dragleave', () => {
+            imagePreview.style.border = '1px dashed black';
+        });
+
+        imagePreview.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    previewImg.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+                imagePreview.style.border = '1px dashed black';
+            }
+        });
+
+        // Function to handle image URL input
+        function previewImage() {
+            const imageUrl = urlInput.value;
+            if (imageUrl) {
+                previewImg.src = imageUrl;
+            }
+        }
+
+        // Function to handle file input change
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    previewImg.src = reader.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
